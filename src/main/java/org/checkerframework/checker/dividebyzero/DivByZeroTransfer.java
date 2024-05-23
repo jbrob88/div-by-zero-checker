@@ -88,7 +88,7 @@ public class DivByZeroTransfer extends CFTransfer {
    *
    * <pre>x = 1 + 0</pre>
    *
-   * should cause us to conclude that "x is not zero".
+   * should cause us to conclude tt "x is not zero".
    *
    * @param operator a binary operator
    * @param lhs the lattice point for the left-hand side of the expression
@@ -97,6 +97,28 @@ public class DivByZeroTransfer extends CFTransfer {
    */
   private AnnotationMirror arithmeticTransfer(
       BinaryOperator operator, AnnotationMirror lhs, AnnotationMirror rhs) {
+    switch (operator) {
+      case DIVIDE:
+        return divide(lhs, rhs);
+      case TIMES:
+        // TODO
+      case PLUS:
+        // TODO
+      case MINUS:
+        // TODO
+      default:
+        // mod is not implemented
+        return top();
+    }
+  }
+
+  private AnnotationMirror divide(AnnotationMirror lhs, AnnotationMirror rhs) {
+    if (equal(lhs, reflect(Zero.class))) {
+      return reflect(Zero.class);
+    }
+    if (equal(rhs, reflect(Zero.class))) {
+      return bottom();
+    }
     // TODO
     return top();
   }
