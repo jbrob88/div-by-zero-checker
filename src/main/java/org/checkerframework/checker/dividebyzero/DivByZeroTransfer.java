@@ -76,7 +76,55 @@ public class DivByZeroTransfer extends CFTransfer {
    */
   private AnnotationMirror refineLhsOfComparison(
       Comparison operator, AnnotationMirror lhs, AnnotationMirror rhs) {
-    // TODO
+    switch (operator) {
+      case EQ:
+        return refineEq(lhs, rhs);
+      case NE:
+        return refineNe(lhs, rhs);
+      case LT:
+        return refineLt(lhs, rhs);
+      case LE:
+        return refineLe(lhs, rhs);
+      case GT:
+        return refineGt(lhs, rhs);
+      case GE:
+        return refineGe(lhs, rhs);
+    }
+    return lhs;
+  }
+
+  private AnnotationMirror refineEq(AnnotationMirror lhs, AnnotationMirror rhs) {
+    return glb(lhs, rhs);
+  }
+
+  private AnnotationMirror refineNe(AnnotationMirror lhs, AnnotationMirror rhs) {
+    AnnotationMirror bottom = bottom();
+    AnnotationMirror zero = reflect(Zero.class);
+    AnnotationMirror nonzero = reflect(Nonzero.class);
+    if (equal(lhs, bottom)) {
+      return bottom;
+    }
+    if (equal(rhs, zero)) {
+      return nonzero;
+    }
+    return lhs;
+  }
+
+  private AnnotationMirror refineLt(AnnotationMirror lhs, AnnotationMirror rhs) {
+    return refineNe(lhs, rhs);
+  }
+
+  private AnnotationMirror refineGt(AnnotationMirror lhs, AnnotationMirror rhs) {
+    return refineNe(lhs, rhs);
+  }
+
+  private AnnotationMirror refineLe(AnnotationMirror lhs, AnnotationMirror rhs) {
+    // TODO - this gives us no new information in the current lattice
+    return lhs;
+  }
+
+  private AnnotationMirror refineGe(AnnotationMirror lhs, AnnotationMirror rhs) {
+    // TODO - this gives us no new information in the current lattice
     return lhs;
   }
 

@@ -52,7 +52,7 @@ class AssignmentProvidedTests {
     if (y < 0) {
       int x = 1 / y;
     }
-/*
+
     if (y <= 0) {
       // :: error: divide.by.zero
       int x = 1 / y;
@@ -66,25 +66,22 @@ class AssignmentProvidedTests {
       // :: error: divide.by.zero
       int x = 1 / y;
     }
-    */
   }
 
   public static void h() {
-    /*
     int zero_the_hard_way = 0 + 0 - 0 * 0;
     // :: error: divide.by.zero
     int x = 1 / zero_the_hard_way;
 
     int one_the_hard_way = 0 * 1 + 1;
     int y = 1 / one_the_hard_way;
-    */
   }
 
   public static void l() {
-    /*
     // :: error: divide.by.zero
     int a = 1 / (1 - 1);
     int y = 1;
+    /*
     // :: error: divide.by.zero
     int x = 1 / (y - y);
     int z = y - y;
