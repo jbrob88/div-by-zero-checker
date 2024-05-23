@@ -21,7 +21,6 @@ class AssignmentProvidedTests {
   }
 
   public static void g(int y) {
-    /*
     if (y == 0) {
       // :: error: divide.by.zero
       int x = 1 / y;
@@ -53,7 +52,7 @@ class AssignmentProvidedTests {
     if (y < 0) {
       int x = 1 / y;
     }
-
+/*
     if (y <= 0) {
       // :: error: divide.by.zero
       int x = 1 / y;
