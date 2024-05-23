@@ -221,7 +221,28 @@ public class DivByZeroTransfer extends CFTransfer {
     // Because this lattice can't tell the difference between positive and negative numbers,
     // the transfer functions for plus and minus are the same
     // (adding a number is the same as subtracting its negative).
-    return plus(lhs, rhs);
+    AnnotationMirror top = top();
+    AnnotationMirror bottom = bottom();
+    AnnotationMirror zero = reflect(Zero.class);
+    AnnotationMirror nonzero = reflect(Nonzero.class);
+
+    if (equal(lhs, bottom) || equal(rhs, bottom)) {
+      return bottom;
+    }
+    if (equal(lhs, zero) && equal(rhs, zero)) {
+      return zero;
+    }
+    if (equal(lhs, nonzero) && equal(rhs, nonzero)) {
+      // This is a gross oversimplification, but it can warn in some useful cases.
+      return zero;
+    }
+    if (equal(lhs, zero) && equal(rhs, nonzero)) {
+      return nonzero;
+    }
+    if (equal(lhs, nonzero) && equal(rhs, zero)) {
+      return nonzero;
+    }
+    return top;
   }
 
   // ========================================================================

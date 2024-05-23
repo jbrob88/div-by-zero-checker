@@ -81,12 +81,10 @@ class AssignmentProvidedTests {
     // :: error: divide.by.zero
     int a = 1 / (1 - 1);
     int y = 1;
-    /*
     // :: error: divide.by.zero
     int x = 1 / (y - y);
     int z = y - y;
     // :: error: divide.by.zero
     int k = 1 / z;
-    */
   }
 }
