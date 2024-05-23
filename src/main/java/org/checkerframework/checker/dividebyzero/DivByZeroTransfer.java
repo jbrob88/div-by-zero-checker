@@ -101,11 +101,11 @@ public class DivByZeroTransfer extends CFTransfer {
       case DIVIDE:
         return divide(lhs, rhs);
       case TIMES:
-        // TODO
+        return times(lhs, rhs);
       case PLUS:
-        // TODO
+        return plus(lhs, rhs);
       case MINUS:
-        // TODO
+        return minus(lhs, rhs);
       default:
         // mod is not implemented
         return top();
@@ -113,14 +113,67 @@ public class DivByZeroTransfer extends CFTransfer {
   }
 
   private AnnotationMirror divide(AnnotationMirror lhs, AnnotationMirror rhs) {
-    if (equal(lhs, reflect(Zero.class))) {
-      return reflect(Zero.class);
+    AnnotationMirror top = top();
+    AnnotationMirror bottom = bottom();
+    AnnotationMirror zero = reflect(Zero.class);
+
+    if (equal(lhs, bottom) || equal(rhs, bottom)) {
+      return bottom;
     }
-    if (equal(rhs, reflect(Zero.class))) {
-      return bottom();
+    if (equal(rhs, zero)) {
+      return bottom;
     }
-    // TODO
-    return top();
+    if (equal(lhs, zero)) {
+      return zero;
+    }
+    // There's no way to be sure that integer division will be nonzero with this simple lattice, since (3/4) == 0 even though it's (nonzero/nonzero). 
+    return top;
+  }
+
+  private AnnotationMirror times(AnnotationMirror lhs, AnnotationMirror rhs) {
+    AnnotationMirror top = top();
+    AnnotationMirror bottom = bottom();
+    AnnotationMirror zero = reflect(Zero.class);
+    AnnotationMirror nonzero = reflect(Nonzero.class);
+
+    if (equal(lhs, bottom) || equal(rhs, bottom)) {
+      return bottom;
+    }
+    if (equal(lhs, zero) || equal(rhs, zero)) {
+      return zero;
+    }
+    if (equal(lhs, nonzero) && equal(rhs, nonzero)) {
+      return nonzero;
+    }
+    return top;
+  }
+
+  private AnnotationMirror plus(AnnotationMirror lhs, AnnotationMirror rhs) {
+    AnnotationMirror top = top();
+    AnnotationMirror bottom = bottom();
+    AnnotationMirror zero = reflect(Zero.class);
+    AnnotationMirror nonzero = reflect(Nonzero.class);
+
+    if (equal(lhs, bottom) || equal(rhs, bottom)) {
+      return bottom;
+    }
+    if (equal(lhs, zero) && equal(rhs, zero)) {
+      return zero;
+    }
+    if (equal(lhs, zero) && equal(rhs, nonzero)) {
+      return nonzero;
+    }
+    if (equal(lhs, nonzero) && equal(rhs, zero)) {
+      return nonzero;
+    }
+    return top;
+  }
+  
+  private AnnotationMirror minus(AnnotationMirror lhs, AnnotationMirror rhs) {
+    // Because this lattice can't tell the difference between positive and negative numbers,
+    // the transfer functions for plus and minus are the same
+    // (adding a number is the same as subtracting its negative).
+    return plus(lhs, rhs);
   }
 
   // ========================================================================
