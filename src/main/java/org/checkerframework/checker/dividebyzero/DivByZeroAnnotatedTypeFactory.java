@@ -38,29 +38,10 @@ public class DivByZeroAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
   }
 
   private Class<? extends Annotation> intToClass(int n) {
-    switch (n) {
-      case 0:
-        return Zero.class;
-      case 1:
-        return One.class;
-      case 2:
-        return Two.class;
-      case 3:
-        return Three.class;
-      case 4:
-        return Four.class;
-      case 5:
-        return Five.class;
-      case 6:
-        return Six.class;
-      case 7:
-        return Seven.class;
-      case 8:
-        return Eight.class;
-      case 9:
-        return Nine.class;
-    }
-    return Top.class;
+    if (n == 0)
+      return Zero.class;
+    else
+      return Nonzero.class;
   }
 
   // ========================================================================
